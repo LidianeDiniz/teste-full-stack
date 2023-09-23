@@ -1,33 +1,48 @@
-import { Input } from "@/components/Login";
-import { Button, Flex, Stack } from "@chakra-ui/react";
+// pages/login.tsx
+import { Button, Flex, Input, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = () => {
+    router.push("/beerList");
+  };
+
   return (
     <Flex
-      w="100vw"
       h="100vh"
       alignItems="center"
       justifyContent="center"
-      bgGradient="linear(to-r, teal.500, green.500)"
+      bgColor="teal.500"
     >
-      <Flex
-        as="form"
-        width="100%"
-        maxW={360}
-        bgGradient="linear(to-r, green.600, teal.800)"
-        padding="8"
-        borderRadius={8}
-        flexDir="column"
+      <VStack
+        spacing={4}
+        bgColor="white"
+        p={8}
+        borderRadius="md"
+        boxShadow="md"
+        w={{ base: "90%", sm: "80%", md: "50%" }}
       >
-        <Stack spacing="4">
-          <Input name="email" label="E-mail" />
-          <Input name="password" label="Senha" />
-        </Stack>
-
-        <Button type="submit" marginTop={6} colorScheme="blackAlpha" size="lg">
+        <Input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button colorScheme="teal" onClick={handleLogin} w="100%" size="lg">
           Entrar
         </Button>
-      </Flex>
+      </VStack>
     </Flex>
   );
 };
