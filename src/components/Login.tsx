@@ -1,44 +1,104 @@
 import {
-  Input as ChakraInput,
-  InputProps as ChakraInputProps,
+  Button,
+  Flex,
   FormControl,
-  FormErrorMessage,
-  FormLabel
+  FormLabel,
+  Input,
+  Stack,
+  Text
 } from "@chakra-ui/react";
-import { ForwardRefRenderFunction, forwardRef } from "react";
-import { FieldError } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { showErrorToast } from "./ErrorMessage";
 
-interface InputProps extends ChakraInputProps {
-  name: string;
-  label?: string;
-  error?: FieldError;
+interface CheckUserCredentialsProps {
+  email: string;
+  password: string;
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, error, ...rest }: InputProps,
-  ref
-) => {
+function checkUserCredentials(credentials: CheckUserCredentialsProps): boolean {
   return (
-    <FormControl isInvalid={!!error}>
-      {!!label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <ChakraInput
-        name={name}
-        id={name}
-        focusBorderColor="teal.300"
-        textColor="HighlightText"
-        bgColor="teal.300"
-        variant="filled"
-        size="lg"
-        _hover={{
-          bgColor: "teal.500"
-        }}
-        ref={ref}
-        {...rest}
-      />
+    credentials.email === "user@email.com" &&
+    credentials.password === "senha123"
+  );
+}
 
-      {!!error && <FormErrorMessage>{error.message}</FormErrorMessage>}
-    </FormControl>
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleLogin = () => {
+    const isValidUser = checkUserCredentials({ email, password });
+    if (isValidUser) {
+      router.push("/beers");
+    } else {
+      showErrorToast(
+        "Usuário ou senha inválidos. Por favor, verifique seus dados ou cadastre-se."
+      );
+      setError("Usuário ou senha inválidos");
+    }
+  };
+
+  const handleSignup = () => {
+    router.push("/users/create");
+  };
+
+  return (
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      minH="100vh"
+      bgGradient="linear(to-r, teal.500, green.500)"
+    >
+      <Flex
+        as="form"
+        flexDir="column"
+        bgGradient="linear(to-r, green.600, teal.800)"
+        p="8"
+        rounded="md"
+        maxW="md"
+      >
+        <Stack spacing="4">
+          <FormControl>
+            <FormLabel>E-mail</FormLabel>
+            <Input
+              type="email"
+              placeholder="Seu e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Senha</FormLabel>
+            <Input
+              type="password"
+              placeholder="Sua senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormControl>
+        </Stack>
+        <Button colorScheme="teal" size="lg" onClick={handleLogin}>
+          Entrar
+        </Button>
+        {error && (
+          <Text mt={2} textAlign="center" color="gray.600">
+            <Button
+              colorScheme="teal"
+              size="lg"
+              onClick={handleSignup}
+              variant="outline"
+            >
+              Cadastrar
+            </Button>
+          </Text>
+        )}
+      </Flex>
+    </Flex>
   );
 };
 
-export const Input = forwardRef(InputBase);
+export default Login;

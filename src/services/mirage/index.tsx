@@ -4,7 +4,7 @@ import { Factory, Model, createServer } from "miragejs";
 type User = {
   name: string;
   email: string;
-  create_at: string;
+  created_at?: string;
 };
 
 export function makeServer() {
@@ -28,32 +28,24 @@ export function makeServer() {
     },
 
     seeds(server) {
-      server.create("user");
+      server.createList("user", 10);
     },
 
     routes() {
       this.namespace = "api";
       this.timing = 750;
 
-      this.post("/", (schema, request) => {
-        const { email, password } = JSON.parse(request.requestBody);
-
-        const user = schema.db.users.findBy({ email });
-
-        if (!user || user.password !== password) {
-          return {
-            errors: ["Credenciais inválidas"]
-          };
-        }
-
-        return {
-          token: "token-de-autenticacao",
-          user: {
-            id: user.id,
-            email: user.email
-          }
-        };
+      this.get("/users", (schema) => {
+        return schema.all("user");
       });
+
+      this.post("/users", (schema, request) => {
+        const user = JSON.parse(request.requestBody);
+        return schema.create("user", user);
+      });
+
+      this.namespace = "";
+      this.passthrough();
     }
   });
 

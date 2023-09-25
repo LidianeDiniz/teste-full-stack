@@ -1,74 +1,63 @@
-import { fetchBeerData } from "@/utils/api";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 interface BeerListProps {
   id: number;
   name: string;
-  abv: number;
-  style: string;
+  image_url: string;
 }
 
-const BeerList = () => {
+export default function BeerList() {
   const [beers, setBeers] = useState<BeerListProps[]>([]);
-  const [filteredBeers, setFilteredBeers] = useState<BeerListProps[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filterCriteria, setFilterCriteria] = useState("");
-  const [sortField, setSortField] = useState("name");
+  const [error, setError] = useState<string | null>(null);
+  const [filterByName, setFilterByName] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "id">("name");
 
   useEffect(() => {
-    fetchBeerData()
-      .then((data) => {
-        setBeers(data);
+    axios
+      .get("https://api.punkapi.com/v2/beers")
+      .then((response) => {
+        setBeers(response.data);
         setLoading(false);
       })
-      .catch((error) => console.error("Erro ao buscar dados da API:", error));
+      .catch((error) => {
+        setError(`Erro ao buscar cervejas: ${error.message}`);
+        setLoading(false);
+      });
   }, []);
 
-  useEffect(() => {
-    const filtered = beers.filter((beer) =>
-      beer.name.toLowerCase().includes(filterCriteria.toLowerCase())
-    );
+  const filteredBeers = beers.filter((beer) =>
+    beer.name.toLowerCase().includes(filterByName.toLowerCase())
+  );
 
-    filtered.sort((a, b) => {
-      if (sortField === "name") {
-        return a.name.localeCompare(b.name);
-      } else if (sortField === "abv") {
-        return a.abv - b.abv;
-      }
-      return 0;
-    });
-
-    setFilteredBeers(filtered);
-  }, [beers, filterCriteria, sortField]);
-
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
+  const sortedBeers = [...filteredBeers].sort((a, b) => {
+    if (sortBy === "name") {
+      return a.name.localeCompare(b.name);
+    } else {
+      return a.id - b.id;
+    }
+  });
 
   return (
     <div>
-      <h1>Lista de Cervejas</h1>
-      <input
-        type="text"
-        placeholder="Filtrar por nome"
-        value={filterCriteria}
-        onChange={(e) => setFilterCriteria(e.target.value)}
-      />
-      <button onClick={() => setSortField("name")}>Ordenar por Nome</button>
-      <button onClick={() => setSortField("abv")}>
-        Ordenar por Teor Alcoólico
-      </button>
+      <div>
+        <input
+          type="text"
+          placeholder="Filtrar por nome"
+          value={filterByName}
+          onChange={(e) => setFilterByName(e.target.value)}
+        />
+        <button onClick={() => setSortBy("name")}>Ordenar por Nome</button>
+        <button onClick={() => setSortBy("id")}>Ordenar por ID</button>
+      </div>
+      {loading && <div>Carregando...</div>}
+      {error && <div>{error}</div>}
       <ul>
-        {filteredBeers.map((beer) => (
-          <li key={beer.id}>
-            <strong>{beer.name}</strong>
-            <p>Teor Alcoólico: {beer.abv}%</p>
-            <p>Estilo: {beer.style}</p>
-          </li>
+        {sortedBeers.map((beer) => (
+          <li key={beer.id}>{beer.name}</li>
         ))}
       </ul>
     </div>
   );
-};
-
-export default BeerList;
+}

@@ -8,13 +8,14 @@ interface BeerListProps {
   image_url: string;
 }
 
-const BeerList = () => {
+export default function BeerList() {
   const [beers, setBeers] = useState<BeerListProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchBeerData()
       .then((data) => {
+        console.log(data);
         setBeers(data);
         setLoading(false);
       })
@@ -86,6 +87,4 @@ const BeerList = () => {
       </Grid>
     </Box>
   );
-};
-
-export default BeerList;
+}
