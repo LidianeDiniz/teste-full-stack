@@ -25,7 +25,7 @@ export default function Home() {
             Login
           </Button>
         </Link>
-        <Link href="/users">
+        <Link href="/users/create">
           <Button colorScheme="teal" variant="outline" size="lg">
             Cadastre-se
           </Button>
