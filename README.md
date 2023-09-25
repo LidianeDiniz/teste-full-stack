@@ -1,6 +1,6 @@
 # Catálogo de Cervejas
 
-Bem-vindo ao Catálogo de Cervejas, uma aplicação web desenvolvida com Next.js, TypeScript, Chakra UI, Yup, Mirage e React Hooks. Esta aplicação oferece recursos como login de usuário, registro de usuário, listagem de cervejas, filtragem de cervejas, ordenação e design responsivo.
+Bem-vindo ao Catálogo de Cervejas, uma aplicação web desenvolvida com Next.js, TypeScript, Chakra UI, Yup, localStorage e React Hooks. Esta aplicação oferece recursos como login de usuário, registro de usuário, listagem de cervejas, filtragem de cervejas, ordenação e design responsivo.
 
 ## Tecnologias Utilizadas
 
