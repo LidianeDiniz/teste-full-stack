@@ -23,7 +23,7 @@ Bem-vindo ao Catálogo de Cervejas, uma aplicação web desenvolvida com Next.js
 - **Listagem de Cervejas:**
   - Exibe uma lista de cervejas
   - Filtra cervejas por nome
-  - Ordena cervejas por nome ou ID com ícones de classificação
+  - Ordena cervejas por nome com ícones de classificação
   - Layout de grade responsivo para a listagem de cervejas
 
 ## Como Usar
