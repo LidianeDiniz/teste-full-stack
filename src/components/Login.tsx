@@ -7,22 +7,11 @@ import {
   Stack,
   Text
 } from "@chakra-ui/react";
+import { Model, createServer } from "miragejs";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { showErrorToast } from "./ErrorMessage";
-
-interface CheckUserCredentialsProps {
-  email: string;
-  password: string;
-}
-
-function checkUserCredentials(credentials: CheckUserCredentialsProps): boolean {
-  return (
-    credentials.email === "user@email.com" &&
-    credentials.password === "senha123"
-  );
-}
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,15 +19,45 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleLogin = () => {
-    const isValidUser = checkUserCredentials({ email, password });
-    if (isValidUser) {
-      router.push("/beers");
-    } else {
-      showErrorToast(
-        "Usuário ou senha inválidos. Por favor, verifique seus dados ou cadastre-se."
-      );
-      setError("Usuário ou senha inválidos");
+  const handleLogin = async () => {
+    try {
+      const server = createServer({
+        models: {
+          user: Model
+        }
+      });
+
+      server.db.loadData({
+        users: [
+          {
+            name: "User 1",
+            email: "user@email.com",
+            password: "senha123"
+          }
+        ]
+      });
+
+      const user = server.db.users.findBy({ email });
+
+      const storedUserString = localStorage.getItem("user");
+      const storedUser = storedUserString ? JSON.parse(storedUserString) : null;
+
+      if (user && user.password === password) {
+        router.push("/beers");
+      } else if (
+        storedUser &&
+        storedUser.email === email &&
+        storedUser.password === password
+      ) {
+        router.push("/beers");
+      } else {
+        showErrorToast("Usuário ou senha inválidos");
+        setError("Usuário ou senha inválidos");
+      }
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      showErrorToast("Erro ao fazer login");
+      setError("Erro ao fazer login");
     }
   };
 
@@ -56,10 +75,11 @@ const Login = () => {
       <Flex
         as="form"
         flexDir="column"
-        bgGradient="linear(to-r, green.600, teal.800)"
+        bg="white"
         p="8"
         rounded="md"
         maxW="md"
+        boxShadow="lg"
       >
         <Stack spacing="4">
           <FormControl>
@@ -81,7 +101,7 @@ const Login = () => {
             />
           </FormControl>
         </Stack>
-        <Button colorScheme="teal" size="lg" onClick={handleLogin}>
+        <Button colorScheme="teal" size="lg" onClick={handleLogin} mt={4}>
           Entrar
         </Button>
         {error && (
@@ -90,7 +110,7 @@ const Login = () => {
               colorScheme="teal"
               size="lg"
               onClick={handleSignup}
-              variant="outline"
+              variant="link"
             >
               Cadastrar
             </Button>

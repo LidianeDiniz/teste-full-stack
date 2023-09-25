@@ -4,7 +4,6 @@ import { Factory, Model, createServer } from "miragejs";
 type User = {
   name: string;
   email: string;
-  created_at?: string;
 };
 
 export function makeServer() {

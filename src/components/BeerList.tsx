@@ -1,63 +1,120 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { Box, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { FaSortAlphaDown } from "react-icons/fa";
 
-interface BeerListProps {
+interface Beer {
   id: number;
   name: string;
+  abv: number;
+  style: string;
   image_url: string;
+  tagline: string;
 }
 
-export default function BeerList() {
-  const [beers, setBeers] = useState<BeerListProps[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filterByName, setFilterByName] = useState("");
-  const [sortBy, setSortBy] = useState<"name" | "id">("name");
+interface BeerListProps {
+  beers: Beer[];
+  isLoading: boolean;
+  initialSortBy?: "name" | "id";
+}
 
-  useEffect(() => {
-    axios
-      .get("https://api.punkapi.com/v2/beers")
-      .then((response) => {
-        setBeers(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(`Erro ao buscar cervejas: ${error.message}`);
-        setLoading(false);
-      });
-  }, []);
+const BeerList: React.FC<BeerListProps> = ({
+  beers,
+  isLoading,
+  initialSortBy = "name"
+}) => {
+  const [sortBy, setSortBy] = useState<"name" | "id">(initialSortBy);
+  const [filterByName, setFilterByName] = useState<string>("");
 
-  const filteredBeers = beers.filter((beer) =>
-    beer.name.toLowerCase().includes(filterByName.toLowerCase())
-  );
-
-  const sortedBeers = [...filteredBeers].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name);
-    } else {
-      return a.id - b.id;
-    }
-  });
+  const filteredAndSortedBeers = beers
+    .filter((beer) =>
+      beer.name.toLowerCase().includes(filterByName.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return a.id - b.id;
+      }
+    });
 
   return (
-    <div>
+    <Box>
+      <Heading as="h2" size="lg" mb={4}>
+        Lista de Cervejas
+      </Heading>
+
+      <input
+        type="text"
+        placeholder="Filtrar por nome"
+        value={filterByName}
+        onChange={(e) => setFilterByName(e.target.value)}
+      />
+
       <div>
-        <input
-          type="text"
-          placeholder="Filtrar por nome"
-          value={filterByName}
-          onChange={(e) => setFilterByName(e.target.value)}
-        />
-        <button onClick={() => setSortBy("name")}>Ordenar por Nome</button>
-        <button onClick={() => setSortBy("id")}>Ordenar por ID</button>
+        <button
+          onClick={() => setSortBy("name")}
+          disabled={sortBy === "name"}
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          Ordenar por Nome <FaSortAlphaDown style={{ marginLeft: "0.5rem" }} />
+        </button>
       </div>
-      {loading && <div>Carregando...</div>}
-      {error && <div>{error}</div>}
-      <ul>
-        {sortedBeers.map((beer) => (
-          <li key={beer.id}>{beer.name}</li>
-        ))}
-      </ul>
-    </div>
+      {isLoading ? (
+        <p>Carregando cervejas...</p>
+      ) : (
+        <Grid
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            md: "repeat(2, 1fr)",
+            lg: "repeat(4, 1fr)"
+          }}
+          gap={4}
+          alignItems="stretch"
+        >
+          {filteredAndSortedBeers.map((beer) => (
+            <GridItem key={beer.id}>
+              <Flex
+                borderWidth="1px"
+                borderRadius="lg"
+                overflow="hidden"
+                width="100%"
+                height="100%"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="flex-end"
+                textColor="teal.900"
+                fontWeight="medium"
+                fontSize="1xl"
+                cursor="pointer"
+                transition="ease-in-out, 2"
+                _hover={{
+                  filter: "brightness(0.4)",
+                  borderWidth: "2px",
+                  borderColor: "teal.300",
+                  borderRadius: "xl"
+                }}
+              >
+                {beer.image_url && (
+                  <img
+                    src={beer.image_url}
+                    alt={beer.name}
+                    className="beer-image"
+                    style={{
+                      width: "5rem",
+                      height: "auto",
+                      maxWidth: "100%",
+                      objectFit: "cover"
+                    }}
+                  />
+                )}
+                <Text>{beer.name}</Text>
+              </Flex>
+            </GridItem>
+          ))}
+        </Grid>
+      )}
+    </Box>
   );
-}
+};
+
+export default BeerList;

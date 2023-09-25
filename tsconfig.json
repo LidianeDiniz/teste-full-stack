@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/lib/privateRoute.js"
+    "src/lib/privateRoute.js",
+    "src/pages/api/auth/signin.js"
   ],
   "exclude": ["node_modules"]
 }

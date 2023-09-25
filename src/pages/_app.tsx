@@ -4,8 +4,11 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/reset.css";
-
 const queryClient = new QueryClient();
+
+//if (process.env.NODE_ENV === "development") {
+//makeServer();
+//}
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
