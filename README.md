@@ -1,44 +1,49 @@
-O teste consiste em criar uma aplicação que expõe uma API REST de um CRUD de usuário e uma aplicação web contendo uma interface para login e acesso a dados de uma API externa.
+# Catálogo de Cervejas
 
-Depois de logado, o usuário da aplicação web deve poder acessar os dados da [Punk API v2](https://punkapi.com/).
+Bem-vindo ao Catálogo de Cervejas, uma aplicação web desenvolvida com Next.js, TypeScript, Chakra UI, Yup, Mirage e React Hooks. Esta aplicação oferece recursos como login de usuário, registro de usuário, listagem de cervejas, filtragem de cervejas, ordenação e design responsivo.
 
-## Back-end 💻
+## Tecnologias Utilizadas
 
-- Todos os endpoints de consulta de dados devem ter autenticação por webtoken ou similar.
-- Deve existir validação dos dados recebidos pela API.
-- O CRUD não precisa de interface, apenas o login e o cadastro
+- Next.js
+- TypeScript
+- Chakra UI
+- Yup
+- Mirage
+- React Hooks
 
-## Front-end 🎨
+## Recursos
 
-O front-end deve atender aos seguintes requisitos:
+- **Autenticação de Usuário:**
 
-- Interface de login e cadastro com feedbacks para usuário ou senha incorreta.
-- Listagem dos dados da Punk API v2.
-- Responsividade.
+  - Login de usuário
+  - Registro de usuário
+  - Tratamento de erros no login
+  - Tratamento de erros no registro de usuário
 
-## Extras 🌟
+- **Listagem de Cervejas:**
+  - Exibe uma lista de cervejas
+  - Filtra cervejas por nome
+  - Ordena cervejas por nome ou ID com ícones de classificação
+  - Layout de grade responsivo para a listagem de cervejas
 
-O desenvolvimento dessas features é opcional.
+## Como Usar
 
-- Filtragem dos dados da Punk API v2 por diferentes critérios, como nome, estilo de cerveja, teor alcoólico, etc.
-- Ordenação dos dados da Punk API v2 por diferentes campos, como nome, teor alcoólico, etc.
-- Comentários e avaliações: permitir que os usuários deixem comentários e avaliações para as cervejas.
-- Dockerfile com todas as dependências.
+1. Clone o repositório do projeto em sua máquina local.
+2. Navegue até o diretório do projeto e execute `npm install` para instalar as dependências.
+3. Execute `npm run dev` ou `yarn dev` para iniciar o servidor de desenvolvimento.
+4. Acesse a aplicação em seu navegador da web em `http://localhost:3000`.
 
-## Critérios de avaliação ✅
+### Usuário de Amostra para Testes
 
-- Funcionamento do projeto.
-- Estrutura do código.
-- Uso de boas práticas.
-- Cumprimento dos requisitos mínimos.
+Você pode usar o seguinte usuário de amostra para testes:
 
-## Entrega 📦
+- Email: "user@email.com"
+- Senha: "senha123"
 
-- Um repositório git (fork deste).
-- Um README do projeto com o passo-a-passo para executar a aplicação.
+## Layout Responsivo
 
-## Observações 📝
+O Catálogo de Cervejas é totalmente responsivo e se adapta a diferentes tamanhos de tela, desde dispositivos móveis até desktops.
 
-1. Pode ser utilizado qualquer framework front-end, preprocessadores de css, task runners, bundlers, etc, de sua preferência, mas nenhum deles é de uso obrigatório.
+## Contribuições
 
-2. Não se deve fazer o commit de pastas como node_modules, o projeto deve instalar suas dependências a partir do package.json.
+Contribuições são bem-vindas! Se você encontrar problemas ou tiver sugestões para melhorar este projeto, sinta-se à vontade para abrir uma issue ou enviar um pull request.
