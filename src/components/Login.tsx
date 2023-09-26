@@ -51,7 +51,9 @@ const Login = () => {
       ) {
         router.push("/beers");
       } else {
-        showErrorToast("Usuário ou senha inválidos");
+        showErrorToast(
+          "Usuário ou senha inválidos. Por favor, verifique seus dados ou cadastre-se."
+        );
         setError("Usuário ou senha inválidos");
       }
     } catch (error) {
@@ -63,6 +65,10 @@ const Login = () => {
 
   const handleSignup = () => {
     router.push("/users/create");
+  };
+
+  const handleBack = () => {
+    return router.push("/");
   };
 
   return (
@@ -104,16 +110,28 @@ const Login = () => {
         <Button colorScheme="teal" size="lg" onClick={handleLogin} mt={4}>
           Entrar
         </Button>
+
         {error && (
           <Text mt={2} textAlign="center" color="gray.600">
-            <Button
-              colorScheme="teal"
-              size="lg"
-              onClick={handleSignup}
-              variant="link"
-            >
-              Cadastrar
-            </Button>
+            <Flex flexDirection="column">
+              <Button
+                colorScheme="teal"
+                size="lg"
+                onClick={handleSignup}
+                variant="link"
+              >
+                Cadastrar
+              </Button>
+
+              <Button
+                colorScheme="teal"
+                size="lg"
+                onClick={handleBack}
+                variant="link"
+              >
+                Voltar
+              </Button>
+            </Flex>
           </Text>
         )}
       </Flex>

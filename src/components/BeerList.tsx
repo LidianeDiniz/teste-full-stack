@@ -1,6 +1,7 @@
 import { Box, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FaSortAlphaDown } from "react-icons/fa";
+import BackButton from "./BackButton";
 
 interface Beer {
   id: number;
@@ -39,10 +40,12 @@ const BeerList: React.FC<BeerListProps> = ({
 
   return (
     <Box>
-      <Heading as="h2" size="lg" mb={4}>
-        Lista de Cervejas
-      </Heading>
-
+      <Flex justifyContent="space-between" mb="5">
+        <Heading as="h2" size="lg" mb={6}>
+          Lista de Cervejas
+        </Heading>
+        <BackButton />
+      </Flex>
       <input
         type="text"
         placeholder="Filtrar por nome"

@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
+import BackButton from "../../components/BackButton"; // Importe o componente BackButton
 import { Input } from "../../components/Input";
 
 type CreateUserFormData = {
@@ -116,18 +117,19 @@ export default function CreateUser() {
                 {...register("password_confirmation")}
               />
             </VStack>
-
-            <Button
-              mt="6"
-              type="submit"
-              colorScheme="teal"
-              isLoading={formState.isSubmitting}
-              width="100%"
-            >
-              Salvar
-            </Button>
           </>
         )}
+        <Flex justify="space-between" alignItems="flex-end">
+          {" "}
+          <BackButton />
+          <Button
+            type="submit"
+            colorScheme="teal"
+            isLoading={formState.isSubmitting}
+          >
+            Salvar
+          </Button>
+        </Flex>
       </Box>
     </Flex>
   );
